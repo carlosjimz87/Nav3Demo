@@ -17,23 +17,31 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.carlosjimz87.nav3demo.domain.model.Screen
 
 @Composable
 fun LoginScreen(
-    state: Screen,
+    state: Screen.Login,
+    backStack: SnapshotStateList<Screen>,
     onLoginSuccess: () -> Unit,
     onBack: () -> Unit
 ) {
-    LaunchedEffect(state) {
-        Log.d("LoginScreen", "Restored screen state: $state")
-    }
-
-    var email by remember { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf(state.email) }
     var password by remember { mutableStateOf("") }
+
+    LaunchedEffect(email) {
+        if (email != state.email) {
+            val index = backStack.lastIndex
+            if (index != -1 && backStack[index] is Screen.Login) {
+                backStack[index] = Screen.Login(email = email)
+            }
+        }
+    }
 
     BackHandler(onBack = onBack)
 

@@ -41,9 +41,10 @@ fun Nav3App(innerPadding: PaddingValues) {
         currentScreen.logTrans()
     }
 
-    Box(modifier = Modifier
-        .padding(innerPadding)
-        .fillMaxSize()
+    Box(
+        modifier = Modifier
+            .padding(innerPadding)
+            .fillMaxSize()
     ) {
         when (val screen = currentScreen) {
             is Screen.Init -> InitScreen(
@@ -54,6 +55,7 @@ fun Nav3App(innerPadding: PaddingValues) {
 
             is Screen.Login -> LoginScreen(
                 state = screen,
+                backStack = backStack,
                 onLoginSuccess = {
                     backStack.clear()
                     backStack.add(Screen.Map())
@@ -66,6 +68,7 @@ fun Nav3App(innerPadding: PaddingValues) {
 
             is Screen.Signup -> SignupScreen(
                 state = screen,
+                backStack = backStack,
                 onSignupSuccess = {
                     backStack.clear()
                     backStack.add(Screen.Map())
@@ -82,12 +85,14 @@ fun Nav3App(innerPadding: PaddingValues) {
 
             is Screen.Map -> MapScreen(
                 state = screen,
+                backStack = backStack,
                 onProfileClick = { backStack.add(Screen.Profile()) },
                 onBack = { (context as? Activity)?.finish() }
             )
 
             is Screen.Profile -> ProfileScreen(
                 state = screen,
+                backStack = backStack,
                 onLogout = {
                     backStack.clear()
                     backStack.add(Screen.Init)

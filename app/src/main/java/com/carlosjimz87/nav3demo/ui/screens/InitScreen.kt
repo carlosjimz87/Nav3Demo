@@ -18,8 +18,9 @@ import com.carlosjimz87.nav3demo.domain.model.Screen
 
 @Composable
 fun InitScreen(
-    state: Screen,
-    onLogin: () -> Unit, onSignup: () -> Unit
+    state: Screen.Init,
+    onLogin: () -> Unit,
+    onSignup: () -> Unit
 ) {
     LaunchedEffect(state) {
         Log.d("InitScreen", "Restored screen state: $state")

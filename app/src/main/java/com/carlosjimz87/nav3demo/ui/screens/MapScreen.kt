@@ -1,6 +1,5 @@
 package com.carlosjimz87.nav3demo.ui.screens
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,6 +10,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -18,17 +22,29 @@ import com.carlosjimz87.nav3demo.domain.model.Screen
 
 @Composable
 fun MapScreen(
-    state: Screen,
-    onProfileClick: () -> Unit, onBack: () -> Unit) {
+    state: Screen.Map,
+    backStack: SnapshotStateList<Screen>,
+    onProfileClick: () -> Unit,
+    onBack: () -> Unit
+) {
+    var userId by rememberSaveable { mutableStateOf(state.userId) }
 
-    LaunchedEffect(state) {
-        Log.d("MapScreen", "Restored screen state: $state")
+    // Sync userId back into navigation stack
+    LaunchedEffect(userId) {
+        val index = backStack.lastIndex
+        if (index != -1 && backStack[index] is Screen.Map) {
+            backStack[index] = Screen.Map(userId = userId)
+        }
     }
 
     BackHandler(onBack = onBack)
 
-    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Map Screen")
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text("Map Screen for user: $userId")
         Spacer(Modifier.height(16.dp))
         Button(onClick = onProfileClick) { Text("Go to Profile") }
     }

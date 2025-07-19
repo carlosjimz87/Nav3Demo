@@ -17,25 +17,33 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.carlosjimz87.nav3demo.domain.model.Screen
 
 @Composable
 fun SignupScreen(
-    state: Screen,
+    state: Screen.Signup,
+    backStack: SnapshotStateList<Screen>,
     onSignupSuccess: () -> Unit,
     onBack: () -> Unit,
     onNavigateToLogin: () -> Unit
-) {
+){
 
-    LaunchedEffect(state) {
-        Log.d("SignupScreen", "Restored screen state: $state")
+    var email by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+
+    LaunchedEffect(email) {
+        if (email.isNotBlank() && email != state.referrer) {
+            val index = backStack.lastIndex
+            if (index != -1 && backStack[index] is Screen.Signup) {
+                backStack[index] = Screen.Signup(referrer = email)
+            }
+        }
     }
-
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
 
     BackHandler(onBack = onBack)
 
@@ -52,7 +60,8 @@ fun SignupScreen(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Password") })
+            label = { Text("Password") }
+        )
         Spacer(Modifier.height(16.dp))
         Button(onClick = onSignupSuccess) { Text("Sign Up (Mock)") }
         Spacer(Modifier.height(8.dp))
