@@ -5,13 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.carlosjimz87.nav3demo.navigation.Nav3App
+import com.carlosjimz87.nav3demo.domain.model.Screen
+import com.carlosjimz87.nav3demo.navigation.rememberNavController
 import com.carlosjimz87.nav3demo.ui.theme.Nav3DemoTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,9 +16,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val navController = rememberNavController(Screen.Init)
+
             Nav3DemoTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Nav3App(innerPadding)
+                    App(controller = navController, innerPadding = innerPadding)
                 }
             }
         }

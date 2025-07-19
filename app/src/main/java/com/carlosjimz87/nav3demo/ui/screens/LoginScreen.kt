@@ -1,7 +1,6 @@
 package com.carlosjimz87.nav3demo.ui.screens
 
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,13 +12,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.carlosjimz87.nav3demo.domain.model.Screen
@@ -27,21 +24,11 @@ import com.carlosjimz87.nav3demo.domain.model.Screen
 @Composable
 fun LoginScreen(
     state: Screen.Login,
-    backStack: SnapshotStateList<Screen>,
     onLoginSuccess: () -> Unit,
     onBack: () -> Unit
 ) {
     var email by rememberSaveable { mutableStateOf(state.email) }
     var password by remember { mutableStateOf("") }
-
-    LaunchedEffect(email) {
-        if (email != state.email) {
-            val index = backStack.lastIndex
-            if (index != -1 && backStack[index] is Screen.Login) {
-                backStack[index] = Screen.Login(email = email)
-            }
-        }
-    }
 
     BackHandler(onBack = onBack)
 
@@ -53,12 +40,17 @@ fun LoginScreen(
     ) {
         Text("Login")
         Spacer(Modifier.height(8.dp))
-        OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text("Email") })
+        OutlinedTextField(
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Email") }
+        )
         Spacer(Modifier.height(8.dp))
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Password") })
+            label = { Text("Password") }
+        )
         Spacer(Modifier.height(16.dp))
         Button(onClick = onLoginSuccess) { Text("Login (Mock)") }
     }

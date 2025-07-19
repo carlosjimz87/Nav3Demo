@@ -1,6 +1,5 @@
 package com.carlosjimz87.nav3demo.ui.screens
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,13 +12,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.carlosjimz87.nav3demo.domain.model.Screen
@@ -27,23 +23,12 @@ import com.carlosjimz87.nav3demo.domain.model.Screen
 @Composable
 fun SignupScreen(
     state: Screen.Signup,
-    backStack: SnapshotStateList<Screen>,
     onSignupSuccess: () -> Unit,
     onBack: () -> Unit,
     onNavigateToLogin: () -> Unit
-){
-
-    var email by rememberSaveable { mutableStateOf("") }
+) {
+    var email by rememberSaveable { mutableStateOf(state.referrer ?: "") }
     var password by rememberSaveable { mutableStateOf("") }
-
-    LaunchedEffect(email) {
-        if (email.isNotBlank() && email != state.referrer) {
-            val index = backStack.lastIndex
-            if (index != -1 && backStack[index] is Screen.Signup) {
-                backStack[index] = Screen.Signup(referrer = email)
-            }
-        }
-    }
 
     BackHandler(onBack = onBack)
 
