@@ -1,15 +1,19 @@
 package com.carlosjimz87.nav3demo.navigation
 
 import android.app.Activity
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.carlosjimz87.nav3demo.common.logTrans
 import com.carlosjimz87.nav3demo.domain.model.Screen
 import com.carlosjimz87.nav3demo.ui.screens.InitScreen
 import com.carlosjimz87.nav3demo.ui.screens.LoginScreen
@@ -19,9 +23,13 @@ import com.carlosjimz87.nav3demo.ui.screens.SignupScreen
 
 @Composable
 fun Nav3App(innerPadding: PaddingValues) {
-    val backStack = remember { mutableStateListOf<Screen>(Screen.Init) }
-    val currentScreen = backStack.last()
+    val backStack = rememberSaveable { mutableStateListOf<Screen>(Screen.Init) }
     val context = LocalContext.current
+    val currentScreen = backStack.last()
+
+    LaunchedEffect(currentScreen) {
+        currentScreen.logTrans()
+    }
 
     Box(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
         when (currentScreen) {
