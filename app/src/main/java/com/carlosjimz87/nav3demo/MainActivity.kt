@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.carlosjimz87.nav3demo.navigation.Nav3App
 import com.carlosjimz87.nav3demo.ui.theme.Nav3DemoTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,28 +21,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             Nav3DemoTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    Nav3App(innerPadding)
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Nav3DemoTheme {
-        Greeting("Android")
     }
 }
