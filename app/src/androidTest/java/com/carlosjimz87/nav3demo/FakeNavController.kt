@@ -4,24 +4,20 @@ import androidx.compose.runtime.mutableStateListOf
 import com.carlosjimz87.nav3demo.navigation.NavController
 
 class FakeNavController<T>(initial: T) : NavController<T> {
-    private val _backStack = mutableStateListOf(initial)
-
-    override val current: T
-        get() = _backStack.last()
+    private var _stack = mutableStateListOf(initial)
+    override val backStack: List<T> get() = _stack
+    override val current: T get() = _stack.last()
 
     override fun navigate(screen: T) {
-        _backStack.add(screen)
+        _stack.add(screen)
     }
 
     override fun replace(screen: T) {
-        _backStack.clear()
-        _backStack.add(screen)
+        _stack.clear()
+        _stack.add(screen)
     }
 
     override fun pop() {
-        if (_backStack.size > 1) _backStack.removeAt(_backStack.lastIndex)
+        if (_stack.size > 1) _stack.removeAt(_stack.lastIndex)
     }
-
-    override val backStack: List<T>
-        get() = _backStack
 }

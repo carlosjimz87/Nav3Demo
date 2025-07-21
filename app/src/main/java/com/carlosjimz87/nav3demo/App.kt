@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.carlosjimz87.nav3demo.common.logTrans
@@ -21,8 +24,7 @@ import com.carlosjimz87.nav3demo.ui.screens.SignupScreen
 @Composable
 fun App(controller: NavController<Screen>, innerPadding: PaddingValues) {
     val context = LocalContext.current
-    val currentScreen = controller.current
-
+    val currentScreen by remember { derivedStateOf { controller.backStack.last() } }
     LaunchedEffect(currentScreen) {
         currentScreen.logTrans()
     }

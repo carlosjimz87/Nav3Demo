@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.carlosjimz87.nav3demo.domain.model.Screen
 
@@ -52,6 +53,6 @@ fun LoginScreen(
             label = { Text("Password") }
         )
         Spacer(Modifier.height(16.dp))
-        Button(onClick = onLoginSuccess) { Text("Login (Mock)") }
+        Button(modifier = Modifier.testTag("LoginMock"), onClick = onLoginSuccess) { Text("Login (Mock)") }
     }
 }
